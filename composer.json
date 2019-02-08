@@ -1,0 +1,14 @@
+{
+    "name": "denrad/mylittleproxy",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Denis Radchenko",
+            "email": "denis@doomer.ru"
+        }
+    ],
+    "require": {
+        "guzzlehttp/psr7": "^1.5",
+        "guzzlehttp/guzzle": "^6.3"
+    }
+}
