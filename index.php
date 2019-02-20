@@ -16,6 +16,8 @@ $serverUri = ServerRequest::getUriFromGlobals();
 $client = new \GuzzleHttp\Client();
 $sendResponse = true;
 
+$logname = sprintf('logs/%u.%u.log', time(), rand(1, 1000));
+
 foreach ($hosts as $host) {
     $uri = $serverUri->withHost($host)->withPort(80);
 
@@ -31,12 +33,19 @@ foreach ($hosts as $host) {
     if ($sendResponse) {
         $sendResponse = false;
 
+        $headers = '';
         foreach ($response->getHeaders() as $key => $values) {
             foreach ($values as $value) {
                 header("{$key}: {$value}");
+                $headers .= "{$key}: {$value}\n";
             }
         }
 
+        try {
+            file_put_contents($logname, $headers . "\n" . $request->getBody());
+        } catch (\Throwable $e) {
+
+        }
         echo $response->getBody();
     }
 }
