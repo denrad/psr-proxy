@@ -20,11 +20,13 @@ $logname = sprintf('logs/%u.%u.log', time(), rand(1, 1000));
 
 foreach ($hosts as $host) {
     $uri = $serverUri->withHost($host)->withPort(80);
+    $headers = "{$_SERVER['REQUEST_METHOD']} {$_SERVER[REQUEST_URI]}\n";
 
     $request = new Request($serverRequest->getMethod(), $uri);
     foreach ($serverRequest->getHeaders() as $key => $values) {
         foreach ($values as $value) {
             $request->withAddedHeader($key, $value);
+            $headers .= "{$key}: {$value}\n";
         }
     }
 
@@ -33,11 +35,9 @@ foreach ($hosts as $host) {
     if ($sendResponse) {
         $sendResponse = false;
 
-        $headers = '';
         foreach ($response->getHeaders() as $key => $values) {
             foreach ($values as $value) {
                 header("{$key}: {$value}");
-                $headers .= "{$key}: {$value}\n";
             }
         }
 
